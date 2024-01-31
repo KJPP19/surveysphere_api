@@ -5,12 +5,13 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const userRoutes = require("./routes/userRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
+const surveyRoutes = require("./routes/surveyRoutes");
 const { errorHandler } = require("./middleware/globalErrorHandler");
 
 dotenv.config();
 const app = express();
 app.use(cors({
-    origin: ["https://surveysphere-i9te.onrender.com"],
+    origin: ["https://surveysphere-i9te.onrender.com", "http://localhost:5173"],
     credentials: true,
 }));
 app.use(express.json());
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 });
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", workspaceRoutes);
+app.use("/api/v1", surveyRoutes);
 
 app.use(errorHandler);
 

@@ -13,7 +13,8 @@ const createWorkspace = asyncHandler(async(req, res) => {
 });
 
 const fetchWorkspaceList = asyncHandler(async(req, res) => {
-    const list = await workspaceList(req.user.userId);
+    const { search } = req.query;
+    const list = await workspaceList(req.user.userId, search);
     res.status(200).json({status: 200, data:list});
 });
 
@@ -22,8 +23,14 @@ const fetchWorkspaceDetail = asyncHandler(async(req, res) => {
     res.status(200).json({status: 200, data: detail});
 });
 
+const deleteWorkspace = asyncHandler(async(req, res) => {
+    const workspace = await deleteWorkspaceData(req.params.workspaceId, req.user.userId);
+    res.status(204).json({status: 200, data: workspace});
+})
+
 module.exports = {
     createWorkspace,
     fetchWorkspaceList,
     fetchWorkspaceDetail,
+    deleteWorkspace,
 };
