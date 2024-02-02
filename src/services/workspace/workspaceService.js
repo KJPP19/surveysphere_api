@@ -37,7 +37,10 @@ const updateWorkspaceData = async(workspaceData, workspaceId, userId) => {
         {_id: workspaceId, user: userId},
         { name },
         { new: true },
-    );
+    ).populate({
+        path: "survey",
+        select: "-user -isEnabled -questions -workspace -shareableSurveyId",
+    });
     if (!updateWorkspace) {
         throw new apiError("workspace not found", 404);
     };
