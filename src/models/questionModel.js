@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const questionSchema = new mongoose.Schema({
     title: {
         type: String,
+        default: null,
     },
     questiontype: {
         type: String,
-        enum: ["form", "essay", "multiple choice", "scale", null],
+        enum: ["form", "essay", "choice", "scale", null],
         default: null,
     },
     user: {

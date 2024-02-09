@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const userRoutes = require("./routes/userRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
 const surveyRoutes = require("./routes/surveyRoutes");
+const questionRoutes = require("./routes/questionRoutes");
 const { errorHandler } = require("./middleware/globalErrorHandler");
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", workspaceRoutes);
 app.use("/api/v1", surveyRoutes);
+app.use("/api/v1", questionRoutes);
 
 app.use(errorHandler);
 

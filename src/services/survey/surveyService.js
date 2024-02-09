@@ -16,4 +16,16 @@ const addNewSurvey =async(surveyData, userId) => {
     return newSurvey;
 };
 
-module.exports = {addNewSurvey};
+const surveyDetail = async(surveyId, userId) => {
+    const survey = await Survey.findOne({_id: surveyId, user: userId})
+    .populate({
+        path: "questions",
+        select: "-user"
+    });
+    if(!Survey){
+        throw new apiError("survey not found", 404);
+    };
+    return survey;
+};
+
+module.exports = {addNewSurvey, surveyDetail};
