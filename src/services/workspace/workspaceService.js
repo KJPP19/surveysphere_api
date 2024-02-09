@@ -10,8 +10,12 @@ const addNewWorkspace = async(workspaceData, userId) => {
     return newWorkspace;
 };
 
-const workspaceList = async(userId) => {
-    const workspaces = await Workspace.find({user: userId});
+const workspaceList = async(userId, searchQuery) => {
+    const query = {
+        user: userId,
+        name: { $regex: new RegExp(searchQuery, "i") },
+      };
+    const workspaces = await Workspace.find(query);
     return workspaces;
 };
 
@@ -19,11 +23,12 @@ const workspaceDetail = async(workspaceId, userId) => {
     const workspace = await Workspace.findOne({ _id: workspaceId, user: userId })
     .populate({
         path: "survey",
-        select: "-user -isEnabled -questions -workspace shareableSurveyId",
+        select: "-user -isEnabled -questions -workspace -shareableSurveyId",
     });
     if(!workspace){
         throw new apiError("workspace not found", 404);
     };
+    return workspace;
 };
 
 const updateWorkspaceData = async(workspaceData, workspaceId, userId) => {
@@ -32,7 +37,10 @@ const updateWorkspaceData = async(workspaceData, workspaceId, userId) => {
         {_id: workspaceId, user: userId},
         { name },
         { new: true },
-    );
+    ).populate({
+        path: "survey",
+        select: "-user -isEnabled -questions -workspace -shareableSurveyId",
+    });
     if (!updateWorkspace) {
         throw new apiError("workspace not found", 404);
     };
@@ -40,7 +48,7 @@ const updateWorkspaceData = async(workspaceData, workspaceId, userId) => {
 };
 
 const deleteWorkspaceData = async (workspaceId, userId) => {
-    const deleteWorkspace = await Workspace.findByIdAndUpdate({
+    const deleteWorkspace = await Workspace.findByIdAndDelete({
         _id: workspaceId,
         user: userId,
     });
