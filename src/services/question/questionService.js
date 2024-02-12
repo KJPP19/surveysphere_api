@@ -22,7 +22,7 @@ const questionDetail = async(questionId, userId) => {
 };
 
 const updateQuestionDetail = async(questionId, questionData, userId) => {
-    const {title, labelstoadd, labelstoremove, range} = questionData;
+    const {title, labelstoadd, labelstoremove, range, isRequired, questiontype} = questionData;
     const updateOperations = {};
 
     if(title){
@@ -39,6 +39,15 @@ const updateQuestionDetail = async(questionId, questionData, userId) => {
 
     if(range && range.length === 2){
         updateOperations.labels = range;
+    };
+
+    if(typeof isRequired !== 'undefined'){
+        updateOperations.isRequired = isRequired;
+    };
+
+    if(questiontype){
+        updateOperations.questiontype = questiontype;
+        updateOperations.labels = [];
     };
 
     updateOperations.user = userId

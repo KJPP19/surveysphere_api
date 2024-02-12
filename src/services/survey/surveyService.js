@@ -28,4 +28,20 @@ const surveyDetail = async(surveyId, userId) => {
     return survey;
 };
 
-module.exports = {addNewSurvey, surveyDetail};
+const updateSurvey = async(surveyData, surveyId, userId) => {
+    const { isEnabled } = surveyData;
+    const survey = await Survey.findByIdAndUpdate(
+        {_id: surveyId, user: userId},
+        {isEnabled},
+        {new: true},
+    ).populate({
+        path: "questions",
+        select: "-user"
+    });
+    if(!survey){
+        throw new apiError("survey failed to update", 400);
+    };
+    return survey;
+};
+
+module.exports = {addNewSurvey, surveyDetail, updateSurvey};

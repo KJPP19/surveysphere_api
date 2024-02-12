@@ -7,6 +7,7 @@ const userRoutes = require("./routes/userRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
 const surveyRoutes = require("./routes/surveyRoutes");
 const questionRoutes = require("./routes/questionRoutes");
+const surveyResponseRoutes = require("./routes/surveyResponseRoutes");
 const { errorHandler } = require("./middleware/globalErrorHandler");
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use("/api/v1", userRoutes);
 app.use("/api/v1", workspaceRoutes);
 app.use("/api/v1", surveyRoutes);
 app.use("/api/v1", questionRoutes);
+app.use("/api/v1", surveyResponseRoutes);
 
 app.use(errorHandler);
 
