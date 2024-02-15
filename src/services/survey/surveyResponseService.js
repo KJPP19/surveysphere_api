@@ -21,4 +21,9 @@ const submitAnswers = async(answersData) => {
     return response;
 };
 
-module.exports = { getSurveyByShareId, submitAnswers };
+const getResponsesBySurveyId = async(surveyId) => {
+    const response = await SurveyResponse.find({survey:surveyId});
+    return response;
+};
+
+module.exports = { getSurveyByShareId, submitAnswers, getResponsesBySurveyId };

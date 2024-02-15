@@ -1,5 +1,5 @@
 const { asyncHandler } = require("../utils/asyncHandler");
-const { getSurveyByShareId, submitAnswers } = require("../services/survey/surveyResponseService");
+const { getSurveyByShareId, submitAnswers, getResponsesBySurveyId } = require("../services/survey/surveyResponseService");
 
 const fetchSurveyByShareId = asyncHandler(async(req, res) => {
     const survey = await getSurveyByShareId(req.params.shareId);
@@ -9,7 +9,8 @@ const fetchSurveyByShareId = asyncHandler(async(req, res) => {
 const submitResponse = asyncHandler(async(req, res) => {
     const response = await submitAnswers(req.body);
     res.status(201).json({status:201, data: response});
-})
+});
+
 
 module.exports = {
     fetchSurveyByShareId,

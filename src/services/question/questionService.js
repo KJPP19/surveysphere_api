@@ -59,8 +59,21 @@ const updateQuestionDetail = async(questionId, questionData, userId) => {
     return question;
 };
 
+const deleteQuestionData = async (questionId, userId) => {
+    const deleteQuestion = await Question.findByIdAndDelete({
+        _id: questionId,
+        user: userId,
+    });
+    await Survey.updateOne(
+        {_id: deleteQuestion.survey},
+        {$pull : { questions: questionId }},
+    );
+    return deleteQuestion;
+};
+
 module.exports = {
     addNewQuestion, 
     questionDetail,
     updateQuestionDetail,
+    deleteQuestionData,
 };
