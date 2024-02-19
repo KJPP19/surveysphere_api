@@ -9,7 +9,7 @@ const login = async (userData) => {
     const { email, password } = userData;
     logger.debug("attempting to login", {user: userData.email});
     const existingUser = await User.findOne({email});
-    if (!existingUser || !(await decryptHashedPassword(password, existingUser.password))) {
+    if (!existingUser || !(await decryptHashedPassword(password, existingUser.password)) || !password) {
         throw new apiError("the provided email or password is incorrect", 400);
     };
     const accessToken = generateAccessToken(existingUser);

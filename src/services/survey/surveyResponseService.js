@@ -16,7 +16,7 @@ const getSurveyByShareId = async(shareId) => {
 
 const submitAnswers = async(answersData) => {
     const { survey, responses } = answersData;
-    
+    await Survey.findByIdAndUpdate(survey, {$inc: {numberOfResponses: 1 } });
     const response = await SurveyResponse.create({survey:survey, responses:responses});
     return response;
 };

@@ -19,7 +19,8 @@ const fetchWorkspaceList = asyncHandler(async(req, res) => {
 });
 
 const fetchWorkspaceDetail = asyncHandler(async(req, res) => {
-    const detail = await workspaceDetail(req.params.workspaceId, req.user.userId);
+    const { sort } = req.query;
+    const detail = await workspaceDetail(req.params.workspaceId, req.user.userId, sort);
     res.status(200).json({status: 200, data: detail});
 });
 

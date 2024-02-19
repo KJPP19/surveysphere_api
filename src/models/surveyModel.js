@@ -21,6 +21,10 @@ const surveySchema = new mongoose.Schema({
     shareableSurveyId: {
         type: String,
     },
+    numberOfResponses: {
+        type: Number,
+        default: 0,
+    },
 },{timestamps: true},);
 
 module.exports = mongoose.model("Survey", surveySchema);
