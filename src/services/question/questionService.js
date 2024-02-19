@@ -22,7 +22,7 @@ const questionDetail = async(questionId, userId) => {
 };
 
 const updateQuestionDetail = async(questionId, questionData, userId) => {
-    const {title, labelstoadd, labelstoremove, range} = questionData;
+    const {title, labelstoadd, labelstoremove, range, isRequired, questiontype} = questionData;
     const updateOperations = {};
 
     if(title){
@@ -41,6 +41,15 @@ const updateQuestionDetail = async(questionId, questionData, userId) => {
         updateOperations.labels = range;
     };
 
+    if(typeof isRequired !== 'undefined'){
+        updateOperations.isRequired = isRequired;
+    };
+
+    if(questiontype){
+        updateOperations.questiontype = questiontype;
+        updateOperations.labels = [];
+    };
+
     updateOperations.user = userId
 
     const question = await Question.findByIdAndUpdate(questionId, updateOperations, {new:true});
@@ -50,8 +59,21 @@ const updateQuestionDetail = async(questionId, questionData, userId) => {
     return question;
 };
 
+const deleteQuestionData = async (questionId, userId) => {
+    const deleteQuestion = await Question.findByIdAndDelete({
+        _id: questionId,
+        user: userId,
+    });
+    await Survey.updateOne(
+        {_id: deleteQuestion.survey},
+        {$pull : { questions: questionId }},
+    );
+    return deleteQuestion;
+};
+
 module.exports = {
     addNewQuestion, 
     questionDetail,
     updateQuestionDetail,
+    deleteQuestionData,
 };

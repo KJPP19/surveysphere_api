@@ -15,15 +15,30 @@ const workspaceList = async(userId, searchQuery) => {
         user: userId,
         name: { $regex: new RegExp(searchQuery, "i") },
       };
-    const workspaces = await Workspace.find(query);
+    const workspaces = await Workspace.find(query)
+    .populate({
+        path: "survey",
+        select: "-user -questions -workspace -shareableSurveyId",
+    });
     return workspaces;
 };
 
-const workspaceDetail = async(workspaceId, userId) => {
+const workspaceDetail = async(workspaceId, userId, sortOption) => {
+    const sortCriteriaValues = {
+        az: {'title': 1},
+        za: {'title': -1},
+        newest: {'createdAt': -1},
+        oldest: {'createdAt': 1},
+    };
+
+    const sortCriteria = sortCriteriaValues[sortOption] || {};
+    console.log(sortCriteria);
+
     const workspace = await Workspace.findOne({ _id: workspaceId, user: userId })
     .populate({
         path: "survey",
-        select: "-user -isEnabled -questions -workspace -shareableSurveyId",
+        select: "-user -questions -workspace -shareableSurveyId",
+        options: {sort: sortCriteria}
     });
     if(!workspace){
         throw new apiError("workspace not found", 404);
@@ -39,7 +54,7 @@ const updateWorkspaceData = async(workspaceData, workspaceId, userId) => {
         { new: true },
     ).populate({
         path: "survey",
-        select: "-user -isEnabled -questions -workspace -shareableSurveyId",
+        select: "-user -questions -workspace -shareableSurveyId",
     });
     if (!updateWorkspace) {
         throw new apiError("workspace not found", 404);
